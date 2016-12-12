@@ -2,16 +2,13 @@ from util.Fonts import Control
 
 
 class Grid:
-    def __init__(self, length, height, printer=lambda x: print(x), pre_draw=None, post_draw=None):
+    def __init__(self, length, height):
         self.length = length
         self.height = height
-        self.grid = [[none_drawable] * length] * height
+        self.grid = [[none_drawable for _ in range(length)] for _ in range(height)]
         self.fillers = []
         self._is_sorted = False
-        self._sort_key = lambda f1, f2: f1.get_priority() < f2.get_priority()
-        self.printer = printer
-        self.pre_draw = pre_draw
-        self.post_draw = post_draw
+        self._sort_key = lambda f: -f.get_priority()
 
     def fill(self, drawable, i, j):
         self.grid[i][j] = drawable
@@ -20,16 +17,25 @@ class Grid:
         self._is_sorted = False
         self.fillers.append(filler)
 
+    def _commit(self):
+        if not self._is_sorted:
+            self.fillers = sorted(self.fillers, key=self._sort_key)
+            self._is_sorted = True
+        for filler in self.fillers:
+            filler.fill(self)
+
     def draw(self):
-        self.printer(Control.reset.value)
-        self.printer(Control.clear_console)
-        self.pre_draw(self.printer)
+        self._commit()
+        res = ''
+        res += Control.reset.value
+        res += Control.clear_console.value
         for i in range(self.height):
             for j in range(self.length):
                 assert self.grid[i][j] is not None
-                self.grid[i][j].draw(self.printer)
-        self.post_draw(self.printer)
-        self.printer(Control.reset.value)
+                res += self.grid[i][j].draw()
+            res += '\n'
+        res += Control.reset.value
+        return res
 
 
 class Drawable:
@@ -37,11 +43,14 @@ class Drawable:
         self.character = character
         self.fonts = fonts
 
-    def draw(self, printer):
+    def draw(self):
+        res = ''
         for font in self.fonts:
-            printer(font.value)
-        printer(self.character)
-        printer(Control.reset.value)
+            res += font.value
+        res += self.character
+        if len(self.fonts) > 0:
+            res += Control.reset.value
+        return res
 
 
 none_drawable = Drawable(' ')

@@ -20,10 +20,10 @@ class Ground(Filler):
         assert self.length == grid.length, self.height <= grid.height
         for i in range(self.ground_waters_height):
             for j in range(self.length):
-                grid.fill(GroundDrawable.ground_waters, grid.height - i - 1, j)
+                grid.fill(GroundDrawable.ground_waters.value, grid.height - i - 1, j)
         for i in range(self.height - self.ground_waters_height):
             for j in range(self.length):
-                grid.fill(GroundDrawable.ground_waters, grid.height - i - self.ground_waters_height - 1)
+                grid.fill(GroundDrawable.ground.value, grid.height - i - self.ground_waters_height - 1, j)
 
     def get_priority(self):
         return self.priority
