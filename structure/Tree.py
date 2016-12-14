@@ -1,19 +1,29 @@
-from main import Parameters
+from main import Rules
 from main.Grid import Drawable
+from structure.Filler import Filler
 from util.Fonts import *
 
 
-class Tree:
-    def __init__(self, root, ps):
+class Tree(Filler):
+    def __init__(self, root, ps=None):
         self.root = root
         self.ps = ps
-        self.branches = [(root[0] - 1, root[1])]
-        self.roots = [(root[0] + 1, root[1])]
+        self.branches = [(TreeDrawable.branch_vertical, root[0] - 1, root[1])]
+        self.roots = [(TreeDrawable.root_vertical, root[0] + 1, root[1])]
         self.leaves = []
         self.fruits = []
-        self.water = Parameters.initial_water
-        self.light = Parameters.initial_light
-        self.age = Parameters.initial_age
+        self.water = Rules.initial_water
+        self.light = Rules.initial_light
+        self.age = Rules.initial_age
+        self._drawables = [self.branches, self.roots, self.leaves, self.fruits, [(TreeDrawable.root, root[0], root[1])]]
+
+    def get_priority(self):
+        return 10
+
+    def fill(self, grid):
+        for ds in self._drawables:
+            for t in ds:
+                grid.fill(t[0].value, t[1], t[2])
 
 
 class TreeDrawable(Enum):
