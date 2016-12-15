@@ -1,5 +1,5 @@
 from enum import Enum
-from random import choice, getrandbits
+from random import choice, random
 
 
 class Result(Enum):
@@ -21,7 +21,7 @@ def grow_direction(ps):
 
 
 def grow_fruits(ps):
-    return bool(getrandbits(1))
+    return random() <= 0.2
 
 
 def grow_type(ps):

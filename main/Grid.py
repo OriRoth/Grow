@@ -42,6 +42,9 @@ class Grid:
         res += Control.reset.value
         return res
 
+    def available(self, i, j):
+        return not self.claims[i][j]
+
 
 class Drawable:
     def __init__(self, character, *fonts):
