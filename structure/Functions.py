@@ -17,16 +17,22 @@ class GrowType(Result):
 
 
 def grow_direction(ps):
-    return choice(GrowDirection.members)
+    return choice([x for x in GrowDirection])
 
 
 def grow_fruits(ps):
-    return random() <= 0.2
+    return True
 
 
 def grow_type(ps):
-    return choice(GrowType.members)
+    if random() <= 0.333333333333333333:
+        return GrowType.branch
+    return GrowType.leaf
 
 
 def root_direction(ps):
-    return choice(GrowDirection.members)
+    return choice([x for x in GrowDirection])
+
+
+def wait(ps):
+    return random() <= 0.677777777777777777

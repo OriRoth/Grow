@@ -43,7 +43,7 @@ class Grid:
         return res
 
     def available(self, i, j):
-        return not self.claims[i][j]
+        return 0 <= i < self.height and 0 <= j < self.length and not self.claims[i][j]
 
 
 class Drawable:

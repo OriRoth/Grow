@@ -15,3 +15,7 @@ leaf_price = 20, 20
 branch_price = 10, 10
 root_price = 20, 20
 fruit_price = 100, 100
+
+rounds = 50
+
+no_near_vertical_branches = True

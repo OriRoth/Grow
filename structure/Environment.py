@@ -21,7 +21,7 @@ class Environment:
             self.raise_ground_waters(j)
         for t in self.trees:
             t.birthday()
-            t.round(lambda i, j: self.grid.available(i, j), lambda i, j: self.ground.is_ground(i, j))
+            t.round(lambda i, j: self.grid.available(i, j), lambda i, j: self.ground.is_ground(i, j, self.grid))
 
     def pour_light(self, j):
         l = light_drop()
@@ -38,7 +38,7 @@ class Environment:
         for i in range(self.ground.height):
             c = self.grid.claims[i + self.grid.height - self.ground.height][j]
             if isinstance(c, Tree):
-                c.add_water(w, i, j)
+                c.add_water(w, i + self.grid.height - self.ground.height, j)
                 w = rain_diffusion(w)
             if w == 0:
                 break
@@ -48,7 +48,7 @@ class Environment:
         for i in range(self.grid.height):
             c = self.grid.claims[self.grid.height - i - 1][j]
             if isinstance(c, Tree):
-                c.add_water(b, i, j)
+                c.add_water(b, self.grid.height - i - 1, j)
                 b = ground_waters_diffusion(b)
             elif not c or b == 0:
                 break
