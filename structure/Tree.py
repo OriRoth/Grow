@@ -16,6 +16,8 @@ class Tree(Filler):
         self.light = Rules.initial_light
         self.age = Rules.initial_age
         self._drawables = [self.branches, self.roots, self.leaves, self.fruits, [(TreeDrawable.root, root[0], root[1])]]
+        self._leaves_indexes = []
+        self._roots_indexes = [(root[0] + 1, root[1])]
 
     def get_priority(self):
         return 10
@@ -23,7 +25,18 @@ class Tree(Filler):
     def fill(self, grid):
         for ds in self._drawables:
             for t in ds:
-                grid.fill(t[0].value, t[1], t[2])
+                grid.fill_n_claim(self, t[0].value, t[1], t[2])
+
+    def birthday(self):
+        self.age += 1
+
+    def add_light(self, light, i, j):
+        if (i, j) in self._leaves_indexes:
+            self.light += light
+
+    def add_water(self, water, i, j):
+        if (i, j) in self._roots_indexes:
+            self.water += water
 
 
 class TreeDrawable(Enum):

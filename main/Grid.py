@@ -7,11 +7,16 @@ class Grid:
         self.height = height
         self.grid = [[none_drawable for _ in range(length)] for _ in range(height)]
         self.fillers = []
+        self.claims = [[None for _ in range(length)] for _ in range(height)]
         self._is_sorted = False
         self._sort_key = lambda f: -f.get_priority()
 
     def fill(self, drawable, i, j):
         self.grid[i][j] = drawable
+
+    def fill_n_claim(self, owner, drawable, i, j):
+        self.grid[i][j] = drawable
+        self.claims[i][j] = owner
 
     def register(self, filler):
         self._is_sorted = False
